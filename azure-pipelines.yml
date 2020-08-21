@@ -1,0 +1,20 @@
+
+schedules:
+  - cron: '0 0 * * *'
+    displayName: "scheduled build"
+    branches:
+      include: ['*']
+    always: true
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  imageName: 'visiontravel.azurecr.io/docker_web01:$(Build.SourceBranchName)'
+
+steps:
+- script: | 
+    docker login -u visiontravel -p +srOVYr4BLDyrLyEgTeAjD8Hcg27CdEb visiontravel.azurecr.io
+    docker build -f Dockerfile -t $(imageName) .
+    docker push $(imageName)
+  displayName: 'docker build'
