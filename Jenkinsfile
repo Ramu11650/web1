@@ -19,9 +19,10 @@ node {
   // here keep a version of every build just in case
   stage("Build Docker Image") {
     docker.withRegistry('https://hub.docker.com/repository', 'dockerRegistry') {
-      def customImage = docker.build("docker.io/${applicationName.toLowerCase()}:${branchName}-${buildNumber}")
+      def customImage = docker.build("naveenjoshi2687/dockercontainer:${branchName}")
+      //def customImage = docker.build("docker.io/${applicationName.toLowerCase()}:${branchName}-${buildNumber}")
       customImage.push()
-      def latestImage = docker.build("docker.io/${applicationName.toLowerCase()}:${branchName}")
+      def latestImage = docker.build("naveenjoshi2687/dockercontainer:${branchName}")
       latestImage.push()
     }
   }
