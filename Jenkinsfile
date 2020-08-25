@@ -3,7 +3,7 @@
 milestone 1
   // Setup variables
   // application name will be used in a few places so create a variable and use string interpolation to use it where needed
-  String applicationName = "naveenjoshi2687/webcon"
+  String applicationName = "11650/wordpress_application"
   // a basic build number so that when we build and push to Artifactory we will not overwrite our previous builds
   String buildNumber = "0.1.${env.BUILD_NUMBER}"
   // global var for branch name
@@ -18,7 +18,7 @@ node {
   milestone 2
   // here keep a version of every build just in case
   stage("Build Docker Image") {
-    docker.withRegistry('https://registry.hub.docker.com', 'docker_registry') {
+    docker.withRegistry('https://registry.hub.docker.com', 'docker_registry_ramu') {
       def customImage = docker.build("${applicationName.toLowerCase()}:${buildNumber}")
       customImage.push()
       def latestImage = docker.build("${applicationName.toLowerCase()}")
