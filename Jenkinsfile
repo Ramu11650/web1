@@ -17,23 +17,21 @@ node {
 
   milestone 2
   // here keep a version of every build just in case
-  stage("Build Docker Image") {
+  stages("Build Docker Image") {
     docker.withRegistry('https://registry.hub.docker.com', 'docker_registry_ramu') {
       def customImage = docker.build("${applicationName.toLowerCase()}:${buildNumber}")
       customImage.push()
-	  }
-	  {
-	  stage('analyze') {
+    }
+      stage('analyze') {
             steps {
                 sh 'echo "${applicationName.toLowerCase()}:${buildNumber} 'pwd'/anchore_images" > anchore_images'
                 anchore name: 'anchore_images'
 			}
 		}
-		}
-      
       def latestImage = docker.build("${applicationName.toLowerCase()}")
       latestImage.push()
     }
+	
   
   milestone 3
 
