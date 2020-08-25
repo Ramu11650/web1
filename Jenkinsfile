@@ -21,6 +21,12 @@ node {
     docker.withRegistry('https://registry.hub.docker.com', 'docker_registry_ramu') {
       def customImage = docker.build("${applicationName.toLowerCase()}:${buildNumber}")
       customImage.push()
+       stage('analyze') {
+            steps {
+                sh 'echo "buildNumber `pwd`/anchore_images" > anchore_images'
+                anchore name: 'anchore_images'
+			}
+		}
       def latestImage = docker.build("${applicationName.toLowerCase()}")
       latestImage.push()
     }
@@ -32,4 +38,5 @@ node {
     sh "rm -Rvf ./*"
   }
 }
+
 
