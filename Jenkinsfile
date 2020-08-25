@@ -25,7 +25,7 @@ node {
 	  {
 	  stage('analyze') {
             steps {
-                sh 'echo "${applicationName.toLowerCase()}:${buildNumber} ${WORKSPACE}/anchore_images" > anchore_images'
+                sh 'echo "${applicationName.toLowerCase()}:${buildNumber} 'pwd'/anchore_images" > anchore_images'
                 anchore name: 'anchore_images'
 			}
 		}
