@@ -3,7 +3,7 @@
 milestone 1
   // Setup variables
   // application name will be used in a few places so create a variable and use string interpolation to use it where needed
-  String applicationName = "naveenjoshi2687/webcon"
+  String applicationName = "docker_web01"
   // a basic build number so that when we build and push to Artifactory we will not overwrite our previous builds
   String buildNumber = "0.1.${env.BUILD_NUMBER}"
   // global var for branch name
@@ -14,22 +14,22 @@ node {
     def scmVars = checkout scm
     branchName = "${scmVars.GIT_BRANCH}"
   }
-
+  
   milestone 2
   // here keep a version of every build just in case
   stage("Build Docker Image") {
-    docker.withRegistry('https://registry.hub.docker.com', 'docker_registry') {
-      def customImage = docker.build("${applicationName.toLowerCase()}:${buildNumber}")
+    docker.withRegistry('https://registry.hub.docker.com', 'azureRegistry') {
+
+      def customImage = docker.build("registry.hub.docker.com/${applicationName.toLowerCase()}:${branchName}-${buildNumber}")
       customImage.push()
-      def latestImage = docker.build("${applicationName.toLowerCase()}")
+      def latestImage = docker.build("registry.hub.docker.com/${applicationName.toLowerCase()}:${branchName}")
       latestImage.push()
     }
   }
   milestone 3
-
+  
   stage("cleanup") {
     // Archive the binary files in Jenkins so we can retrieve them later should we need to audit them
     sh "rm -Rvf ./*"
   }
 }
-
